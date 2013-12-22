@@ -1,2 +1,2 @@
 all:
-	g++ -o agent agentssl.cc -lcurl -lc++ -Irapidjson
+	g++ -g -o agent agent.cc catalog.cc resource.cc -lcurl -lc++ -Irapidjson
