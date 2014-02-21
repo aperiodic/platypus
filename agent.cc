@@ -66,6 +66,9 @@ int main(void)
         Catalog catalog(response);
         catalog.dump();
 
+        std::cout << "Applying catalog ..." << std::endl;
+        catalog.apply();
+
         /* always cleanup */
         curl_easy_cleanup(curl);
     }

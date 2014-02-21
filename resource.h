@@ -12,6 +12,7 @@ public:
     Resource(rapidjson::Document &json);
     ~Resource() {};
 
+    void apply();
     void dump();
     std::string getIdentifier() { return mIdentifier; }
     void addContainedResource(Resource *contained);

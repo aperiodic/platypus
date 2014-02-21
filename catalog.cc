@@ -136,6 +136,16 @@ void Catalog::from_json()
     mValid &= parse_data(d);
 }
 
+void Catalog::apply()
+{
+    // apply resources
+    std::map<std::string, Resource*>::iterator iter;
+    for (iter = mResources.begin(); iter != mResources.end(); ++iter)
+    {
+        iter->second->apply();
+    }
+}
+
 void Catalog::dump()
 {
     std::cout << "name:\t\t"        << mName << std::endl;

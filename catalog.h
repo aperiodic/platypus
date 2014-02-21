@@ -15,6 +15,7 @@ public:
     Catalog(std::string json);
     ~Catalog() {};
 
+    void apply();
     void dump();
 
 private:

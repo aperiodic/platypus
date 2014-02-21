@@ -89,6 +89,24 @@ std::vector<std::string> Resource::getContainedResourceNames()
     return result;
 }
 
+void Resource::apply()
+{
+    // spike on file for a few params
+    // actual solution will look nothing like this
+
+    if (mType != "File")
+    {
+        if (mType != "Stage" && mType != "Class")
+        {
+            // Stage and Class aren't apply-able resources
+            std::cout << __func__ << " not supporting resources of type " << mType << std::endl;
+        }
+        return;
+    }
+
+
+}
+
 void Resource::dumpParameters()
 {
     std::cout << "\tparameters:" << std::endl;
