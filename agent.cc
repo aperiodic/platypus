@@ -22,7 +22,7 @@ size_t curl_write_fn(char *ptr, size_t size, size_t nmemb, void *data)
     return size * nmemb;
 }
 
-int main(void)
+int retrieve_and_apply_catalog(void)
 {
     CURL *curl;
     CURLcode res;
@@ -33,8 +33,13 @@ int main(void)
 
     curl_global_init(CURL_GLOBAL_DEFAULT);
 
-    curl = curl_easy_init();
-    if (curl) {
+    while (true) {   // pseudo-while, always break at the bottom
+        curl = curl_easy_init();
+        if (!curl) {
+            fprintf(stderr, "curl_easy_init() failed\n");
+            break;
+        }
+
         /* set up callback */
         std::string response;
         curl_easy_setopt(curl, CURLOPT_URL, "https://localhost:8140/env/catalog/kylo.local");
@@ -55,10 +60,18 @@ int main(void)
 
         /* Perform the request, res will get the return code */
         res = curl_easy_perform(curl);
+
         /* Check for errors */
-        if (res != CURLE_OK)
+        if (res != CURLE_OK) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n",
                     curl_easy_strerror(res));
+            if (res == CURLE_SSL_CACERT) {
+                fprintf(stderr, "If you're on Mavericks, you will need to add the ca cert to the keychain, e.g. with\n" \
+                  "\tsecurity add-trusted-cert <ca.pem>\n" \
+                  "\nSee http://curl.haxx.se/mail/archive-2013-10/0036.html for some background.");
+            }
+            break;
+        }
 
         if (debug)
             std::cout << response << std::endl;
@@ -71,9 +84,16 @@ int main(void)
 
         /* always cleanup */
         curl_easy_cleanup(curl);
+
+        break;
     }
 
     curl_global_cleanup();
 
     return 0;
+}
+
+int main(int argc, char **argv)
+{
+    retrieve_and_apply_catalog();
 }
