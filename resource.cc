@@ -16,13 +16,12 @@ Resource::Resource(rapidjson::Document &json)
 bool Resource::parse_resource(rapidjson::Document &resource)
 {
     if (!resource.HasMember("tags")        || !resource["tags"].IsArray()         ||
-        !resource.HasMember("type")        || !resource["type"].IsString()        ||
-        !resource.HasMember("title")       || !resource["title"].IsString()       ||
-        !resource.HasMember("exported")    || !resource["exported"].IsBool()      ||
-        (resource.HasMember("line")        && !resource["line"].IsInt())          ||
-        (resource.HasMember("file")        && !resource["file"].IsString())       ||
-        (resource.HasMember("parameters")  && !resource["parameters"].IsObject()))
-    {
+            !resource.HasMember("type")        || !resource["type"].IsString()        ||
+            !resource.HasMember("title")       || !resource["title"].IsString()       ||
+            !resource.HasMember("exported")    || !resource["exported"].IsBool()      ||
+            (resource.HasMember("line")        && !resource["line"].IsInt())          ||
+            (resource.HasMember("file")        && !resource["file"].IsString())       ||
+            (resource.HasMember("parameters")  && !resource["parameters"].IsObject())) {
         std::cout << "Bad format for resource?" << std::endl;
         return false;
     }
@@ -32,15 +31,13 @@ bool Resource::parse_resource(rapidjson::Document &resource)
     mIdentifier  = mType + "[" + mTitle + "]";
 
     const rapidjson::Value &tags = resource["tags"];
-    for (rapidjson::SizeType i = 0; i < tags.Size(); i++)
-    {
+    for (rapidjson::SizeType i = 0; i < tags.Size(); i++) {
         mTags.push_back(tags[i].GetString());
     }
 
     mExported = resource["exported"].GetBool();
 
-    if (resource.HasMember("parameters"))
-    {
+    if (resource.HasMember("parameters")) {
         const rapidjson::Value &p = resource["parameters"];
         if (!p.IsObject())
             std::cout << "Parameters not an object?" << std::endl;
@@ -49,14 +46,13 @@ bool Resource::parse_resource(rapidjson::Document &resource)
 
         // enumerate members, check that they're all strings
         rapidjson::Value::ConstMemberIterator iter;
-        for (iter = parameters.MemberBegin(); iter != parameters.MemberEnd(); ++iter)
-        {
-            if (iter->value.GetType() != rapidjson::kStringType)
-            {
+        for (iter = parameters.MemberBegin(); iter != parameters.MemberEnd(); ++iter) {
+            if (iter->value.GetType() != rapidjson::kStringType) {
                 static const char* kTypeNames[] = { "Null", "False", "True", "Object",
-                                                    "Array", "String", "Number" };
+                                                    "Array", "String", "Number"
+                                                  };
                 std::cout << "Dropping parameter " << iter->name.GetString() <<
-                    " with type of " << kTypeNames[iter->value.GetType()] << std::endl;
+                          " with type of " << kTypeNames[iter->value.GetType()] << std::endl;
                 continue;
             }
 
@@ -81,8 +77,7 @@ std::vector<std::string> Resource::getContainedResourceNames()
 {
     std::vector<std::string> result;
     std::vector<Resource *>::iterator iter;
-    for (iter = mContainedResources.begin(); iter != mContainedResources.end(); ++iter)
-    {
+    for (iter = mContainedResources.begin(); iter != mContainedResources.end(); ++iter) {
         result.push_back((*iter)->getIdentifier());
     }
 
@@ -94,10 +89,8 @@ void Resource::apply()
     // spike on file for a few params
     // actual solution will look nothing like this
 
-    if (mType != "File")
-    {
-        if (mType != "Stage" && mType != "Class")
-        {
+    if (mType != "File") {
+        if (mType != "Stage" && mType != "Class") {
             // Stage and Class aren't apply-able resources
             std::cout << __func__ << " not supporting resources of type " << mType << std::endl;
         }
@@ -111,8 +104,7 @@ void Resource::dumpParameters()
 {
     std::cout << "\tparameters:" << std::endl;
     std::map<std::string, std::string>::iterator iter;
-    for (iter = mParameters.begin(); iter != mParameters.end(); ++iter)
-    {
+    for (iter = mParameters.begin(); iter != mParameters.end(); ++iter) {
         std::cout << "\t\t" << iter->first << ":\t" << iter->second << std::endl;
     }
 }

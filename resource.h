@@ -14,7 +14,10 @@ public:
 
     void apply();
     void dump();
-    std::string getIdentifier() { return mIdentifier; }
+    std::string getIdentifier()
+    {
+        return mIdentifier;
+    }
     void addContainedResource(Resource *contained);
     std::vector<std::string> getContainedResourceNames();
 
@@ -28,7 +31,7 @@ private:
     bool                               mExported;
     std::vector<std::string>           mTags;
     std::map<std::string, std::string> mParameters;
-        // TODO: non-string parameters
+    // TODO: non-string parameters
 
     std::vector<Resource *>            mContainedResources;
 

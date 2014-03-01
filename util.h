@@ -29,14 +29,13 @@ static rapidjson::Document get_subobject(const rapidjson::Value& obj)
 template <class Iter, class String>
 String join(const Iter &begin, const Iter &end, const String &sep)
 {
-  String result;
-  for (Iter it = begin; it != end; ++it)
-  {
-    if (!result.empty())
-      result.append(sep);
-    result.append(*it);
-  }
-  return result;
+    String result;
+    for (Iter it = begin; it != end; ++it) {
+        if (!result.empty())
+            result.append(sep);
+        result.append(*it);
+    }
+    return result;
 }
 
 template <class Container, class String>

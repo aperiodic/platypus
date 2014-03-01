@@ -14,8 +14,7 @@ size_t curl_write_fn(char *ptr, size_t size, size_t nmemb, void *data)
 {
     std::string *str = reinterpret_cast<std::string *>(data);
 
-    for (int x = 0; x < size * nmemb; ++x)
-    {
+    for (int x = 0; x < size * nmemb; ++x) {
         (*str) += ptr[x];
     }
 
@@ -67,8 +66,8 @@ int retrieve_and_apply_catalog(void)
                     curl_easy_strerror(res));
             if (res == CURLE_SSL_CACERT) {
                 fprintf(stderr, "If you're on Mavericks, you will need to add the ca cert to the keychain, e.g. with\n" \
-                  "\tsecurity add-trusted-cert <ca.pem>\n" \
-                  "\nSee http://curl.haxx.se/mail/archive-2013-10/0036.html for some background.");
+                        "\tsecurity add-trusted-cert <ca.pem>\n" \
+                        "\nSee http://curl.haxx.se/mail/archive-2013-10/0036.html for some background.");
             }
             break;
         }

@@ -20,8 +20,7 @@ bool Catalog::validate_document_type(rapidjson::Document& d)
     // validate top-level and document_type
     if (!d.IsObject() ||
             !d.HasMember("document_type") || !d["document_type"].IsString() ||
-            strncmp(d["document_type"].GetString(), "Catalog", strlen("Catalog")) != 0)
-    {
+            strncmp(d["document_type"].GetString(), "Catalog", strlen("Catalog")) != 0) {
         std::cout << "No document_type?" << std::endl;
         return false;
     }
@@ -30,16 +29,14 @@ bool Catalog::validate_document_type(rapidjson::Document& d)
 
 bool Catalog::validate_metadata(rapidjson::Document& d)
 {
-    if (!d.HasMember("metadata") || !d["metadata"].IsObject() )
-    {
+    if (!d.HasMember("metadata") || !d["metadata"].IsObject() ) {
         std::cout << "No metadata?" << std::endl;
         return false;
     }
 
     rapidjson::Document metadata = get_subobject(d, "metadata");
     if (!metadata.HasMember("api_version") || !metadata["api_version"].IsInt() ||
-            metadata["api_version"].GetInt() != 1)
-    {
+            metadata["api_version"].GetInt() != 1) {
         std::cout << "Bad metadata?" << std::endl;
         return false;
     }
@@ -50,8 +47,7 @@ bool Catalog::validate_metadata(rapidjson::Document& d)
 bool Catalog::parse_data(rapidjson::Document &d)
 {
     // validate that there is a data object
-    if (!d.HasMember("data") || !d["data"].IsObject())
-    {
+    if (!d.HasMember("data") || !d["data"].IsObject()) {
         std::cout << "No data?" << std::endl;
         return false;
     }
@@ -59,13 +55,12 @@ bool Catalog::parse_data(rapidjson::Document &d)
     rapidjson::Document data = get_subobject(d, "data");
 
     if (!data.HasMember("tags")        || !data["tags"].IsArray()         ||
-        !data.HasMember("name")        || !data["name"].IsString()        ||
-        !data.HasMember("version")     || !data["version"].IsInt()        ||
-        !data.HasMember("environment") || !data["environment"].IsString() ||
-        !data.HasMember("resources")   || !data["resources"].IsArray()    ||
-        !data.HasMember("edges")       || !data["edges"].IsArray()        ||
-        !data.HasMember("classes")     || !data["classes"].IsArray())
-    {
+            !data.HasMember("name")        || !data["name"].IsString()        ||
+            !data.HasMember("version")     || !data["version"].IsInt()        ||
+            !data.HasMember("environment") || !data["environment"].IsString() ||
+            !data.HasMember("resources")   || !data["resources"].IsArray()    ||
+            !data.HasMember("edges")       || !data["edges"].IsArray()        ||
+            !data.HasMember("classes")     || !data["classes"].IsArray()) {
         std::cout << "Bad format for data?" << std::endl;
         return false;
     }
@@ -75,14 +70,12 @@ bool Catalog::parse_data(rapidjson::Document &d)
     mEnvironment = data["environment"].GetString();
 
     const rapidjson::Value &tags = data["tags"];
-    for (rapidjson::SizeType i = 0; i < tags.Size(); i++)
-    {
+    for (rapidjson::SizeType i = 0; i < tags.Size(); i++) {
         mTags.push_back(tags[i].GetString());
     }
 
     const rapidjson::Value &resources = data["resources"];
-    for (rapidjson::SizeType i = 0; i < resources.Size(); i++)
-    {
+    for (rapidjson::SizeType i = 0; i < resources.Size(); i++) {
         const rapidjson::Value &r = resources[i];
         if (!r.IsObject())
             std::cout << "Resource not an object?" << std::endl;
@@ -98,16 +91,14 @@ bool Catalog::parse_data(rapidjson::Document &d)
     }
 
     const rapidjson::Value &edges = data["edges"];
-    for (rapidjson::SizeType i = 0; i < edges.Size(); i++)
-    {
+    for (rapidjson::SizeType i = 0; i < edges.Size(); i++) {
         const rapidjson::Value &e = edges[i];
         if (!e.IsObject())
             std::cout << "Edge not an object?" << std::endl;
 
         rapidjson::Document edge = get_subobject(e);
         if (!edge.HasMember("source") || !edge["source"].IsString() ||
-            !edge.HasMember("target") || !edge["target"].IsString())
-        {
+                !edge.HasMember("target") || !edge["target"].IsString()) {
             std::cout << "Bad edge object?" << std::endl;
             continue;
         }
@@ -140,8 +131,7 @@ void Catalog::apply()
 {
     // apply resources
     std::map<std::string, Resource*>::iterator iter;
-    for (iter = mResources.begin(); iter != mResources.end(); ++iter)
-    {
+    for (iter = mResources.begin(); iter != mResources.end(); ++iter) {
         iter->second->apply();
     }
 }
@@ -157,8 +147,7 @@ void Catalog::dump()
 
     // dump resources
     std::map<std::string, Resource*>::iterator iter;
-    for (iter = mResources.begin(); iter != mResources.end(); ++iter)
-    {
+    for (iter = mResources.begin(); iter != mResources.end(); ++iter) {
         iter->second->dump();
     }
 }
